@@ -1,0 +1,169 @@
+<!DOCTYPE html>
+<html lang="en">
+
+<head>
+    <meta charset="UTF-8">
+    <title>Razorpay Payment</title>
+    <script src="https://checkout.razorpay.com/v1/checkout.js"></script>
+    <script src="https://code.jquery.com/jquery-3.6.0.min.js"></script>
+    <style>
+       #payment-form {
+    max-width: 300px;
+    margin: 0 auto;
+    padding: 20px;
+    border: 1px solid #ccc;
+    border-radius: 8px;
+    box-shadow: 0 0 10px rgba(0, 0, 0, 0.1);
+    animation: fadeIn 1s ease-in-out forwards;
+    opacity: 0;
+}
+
+@keyframes fadeIn {
+    from {
+        opacity: 0;
+    }
+    to {
+        opacity: 1;
+    }
+}
+
+#payment-form {
+    max-width: 300px;
+    margin: 0 auto;
+    padding: 20px;
+    border: 1px solid #ccc;
+    border-radius: 8px;
+    box-shadow: 0 0 10px rgba(0, 0, 0, 0.1);
+    background-color: rgba(255, 255, 255, 0.8); /* Adjust the alpha value (last parameter) to control transparency */
+}
+
+#payment-form label {
+    display: block;
+    margin-bottom: 8px;
+    font-weight: bold;
+    color: #891652;
+}
+
+#payment-form input {
+    width: calc(100% - 16px);
+    padding: 8px;
+    margin-bottom: 16px;
+    box-sizing: border-box;
+    border: 1px solid #ccc;
+    border-radius: 4px;
+    background-color: rgba(255, 255, 255, 0.5); /* Adjust the alpha value (last parameter) to control transparency */
+}
+
+#payment-form button {
+    background-color: #4CAF50;
+    color: white;
+    padding: 10px 15px;
+    border: none;
+    border-radius: 4px;
+    cursor: pointer;
+    font-size: 16px;
+    width: 100%;
+    transition: background-color 0.3s ease-in-out;
+}
+
+#payment-form button:hover {
+    background-color: #45a049;
+}
+
+body {
+    background-color:#FF898B ;
+    background-size: 100% 100%;
+    background-repeat: no-repeat;
+    background-attachment: fixed;
+}
+
+h1 {
+    color: #891652;
+    text-align: center;
+    transition: all 0.5s ease-in-out;
+}
+
+h1:hover {
+    color: #ff69b4; /* Change to the desired hover color */
+}
+
+    </style>
+</head>
+
+<body>
+
+    <h1 style="color:#891652; ">𝐏𝐚𝐲𝐦𝐞𝐧𝐭 𝐅𝐨𝐫𝐦</h1>
+    <form id="payment-form">
+        {% csrf_token %}
+        <div>
+            <label style="color:#891652; " for="name">Name:</label>
+            <input type="text" id="name" name="name" required minlength="3" maxlength="50"> <br>
+            <label style="color:#891652;" for="amount">Enter Amount (in INR):</label>
+            <input type="number" id="amount" name="amount" required min="1">
+            <br>
+            <button type="button" id="pay-button">Pay Now</button>
+        </div>
+    </form>
+
+    <script>
+        $(document).ready(function () {
+            $("#pay-button").click(function (e) {
+                e.preventDefault();
+
+                const name = $("#name").val();
+                const amount = $("#amount").val();
+
+                if (name.length < 3 || name.length > 50) {
+                    alert("Please enter a valid name (3-50 characters).");
+                    return;
+                }
+
+                if (amount <= 0) {
+                    alert("Please enter a valid amount greater than 0.");
+                    return;
+                }
+
+                $.ajax({
+                    type: "POST",
+                    url: "/payment/initiate-payment/",
+                    data: { name: name, amount: amount },
+                    dataType: "json",
+                    beforeSend: function (xhr) {
+                        xhr.setRequestHeader("X-CSRFToken", $("[name=csrfmiddlewaretoken]").val());
+                    },
+                    success: function (data) {
+                        const options = {
+                            key: data.key,
+                            amount: data.amount,
+                            currency: data.currency,
+                            order_id: data.id,
+                            name: data.name,
+                            description: data.description,
+                            image: data.image,
+                            handler: function (response) {
+                                if (response.razorpay_payment_id) {
+                                    window.location.href = "/payment/payment-success/";
+                                } else {
+                                    window.location.href = "/payment/payment-failed/";
+                                }
+                            },
+                            prefill: {
+                                name: name,
+                                email: "customer@example.com", // You might want to collect and use the customer's email
+                                contact: "customer_contact", // You might want to collect and use the customer's contact
+                            },
+                        };
+
+                        const rzp = new Razorpay(options);
+                        rzp.open();
+                    },
+                    error: function (error) {
+                        console.error("Error initiating payment:", error);
+                    }
+                });
+            });
+        });
+    </script>
+</body>
+
+</html>

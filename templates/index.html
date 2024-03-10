@@ -1,0 +1,92 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+
+    <title>
+        {% block 'title' %}
+        Main Home
+        {% endblock %}
+    </title>
+</head>
+<body>
+<h3 align="center" style="color: #FEE190 ;"> Astrology Management </h3>
+<hr><hr>
+<style >
+body, html {
+  height: 100%;
+}
+body {
+  background-image: url("https://www.zodiacsign.com/images/believe-in-astrology.png");
+    height: 100%;
+
+
+  background-position: center;
+  background-repeat: no-repeat;
+  background-size: cover;
+}
+    nav {
+  background-color: #333; /* change the background color to your desired color */
+  overflow: hidden;
+}
+
+nav ul {
+  margin: 0;
+  padding: 0;
+  list-style: none;
+  background-color :  rgba(16, 26, 37, 0.5) ;
+  display: flex;
+  justify-content: center;
+}
+
+nav li {
+  margin: 0;
+}
+
+nav a {
+  display: block;
+  color: white;
+  text-align: center;
+  padding: 14px 20px;
+  text-decoration: none;
+}
+
+nav a:hover {
+  background-color: #ddd; /* change the hover background color to your desired color */
+  color: black;
+}
+
+</style>
+<nav>
+    <ul>
+        <li><a href="{% url 'index' %}">Home</a>&nbsp;&nbsp;</li>
+        <li><a href="{% url 'registration' %}">Registration</a>&nbsp;
+</li>
+        <li><a href="{% url 'userlogin' %}">Login</a>&nbsp;</li>
+
+
+    </ul>
+</nav>
+<hr><hr>
+<marquee direction="right" behavior="alternate" style="background:#101A25; color: white;">
+    LOGIN TO GET IN TO WEB SITE
+</marquee>
+
+<hr><hr>
+<h1 align="center" style="color: #FEE190;">𝓟𝓮𝓸𝓹𝓵𝓮 𝓝𝓮𝓮𝓭 𝓐𝓼𝓽𝓻𝓸𝓵𝓸𝓰𝓲𝓬𝓪𝓵 𝓢𝓸𝓵𝓾𝓽𝓲𝓸𝓷𝓼 ! 𝓐𝓷𝓭 𝓦𝓮 𝓐𝓻𝓮 𝓗𝓮𝓻𝓮 𝓣𝓸 𝓗𝓮𝓵𝓹 𝓨𝓸𝓾
+</h1>
+
+<br>
+<br>
+<script type="text/javascript">
+    (function(d, m){
+        var kommunicateSettings =
+            {"appId":"3469fb1673a8b3b466a5d098388694deb","popupWidget":true,"automaticChatOpenOnNavigation":true};
+        var s = document.createElement("script"); s.type = "text/javascript"; s.async = true;
+        s.src = "https://widget.kommunicate.io/v2/kommunicate.app";
+        var h = document.getElementsByTagName("head")[0]; h.appendChild(s);
+        window.kommunicate = m; m._globals = kommunicateSettings;
+    })(document, window.kommunicate || {});
+/* NOTE : Use web server to view HTML files as real-time update will not work if you directly open the HTML file in the browser. */
+</script>
+</body>
+</html>
